@@ -10,25 +10,48 @@ function getParams() {
     return params
 }
 
-async function getUsers() {
+async function getDatas() {
     // Récupère fichier photographes
     const data = await fetch('/data/photographers.json')
     .then(response => response.json())
-    .then(data => data.photographers)
-    // Retourner le tableau photographers seulement une fois
+    .then(data => data)
+    // Retourner les données une fois
     return data
 }
 
+//header user page
 async function getProfile(){
     //Utilise le paramètre dans l'url et repère l'id identique dans les datas photographes
     const photographHeader = document.querySelector(".photograph-header");
     if (photographHeader){
         const params = getParams()
-        const users = await getUsers()
-        const profile = users.filter(photographer => photographer.id == params)
+        const { photographers } = await getDatas()
+        const profile = photographers.filter(photographer => photographer.id == params)
         console.log(profile)
         return profile
     }
 }
 
+async function getMedias(){
+    //Utilise le paramètre dans l'url et repère l'id identique dans les datas photographes
+    const mosaicContainer = document.querySelector(".mosaic-container");
+    if (mosaicContainer){
+        const params = getParams()
+        const { media } = await getDatas()
+        const medias = media.filter(media => media.id == params)
+        console.log(medias)
+        return medias
+    }
+}
+
+//header user page /w mediasFactory and photographerFactory
+async function displayUserData(){
+    const userModel = photographerFactory(data)
+    const userCardDOM = userModel.getUserCardDOM(data)
+    const user = await getProfile()
+    const header = userCardDOM(user)
+    const mosaic
+    return {header} 
+}
+//mosaic
 getProfile()
