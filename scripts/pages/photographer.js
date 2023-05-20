@@ -1,57 +1,84 @@
-const getParamValue = (param) => {
+function getParamValue(param){
+    // Récupère le paramètre dans l'URL
     const params = new URLSearchParams(window.location.search);
     const valueOfParam = params.get(param)
     return valueOfParam
 }
 
 function getParams() {
-    // Récupère les paramètres dans l'url afin d'afficher les données sur un photographes
+    // Récupère la valeur du paramètre ID lié au photographe choisi
     const params = getParamValue('user')
     return params
 }
 
 async function getDatas() {
-    // Récupère fichier photographes
+    // Récupère les données photographes
     const data = await fetch('/data/photographers.json')
     .then(response => response.json())
     .then(data => data)
-    // Retourner les données une fois
+    // Retourner le tableau photographers seulement une fois
     return data
 }
 
-//header user page
 async function getProfile(){
-    //Utilise le paramètre dans l'url et repère l'id identique dans les datas photographes
+    //Utilise la valeur du paramètre "ID" dans l'url et repère l'ID identique dans les datas photographes pour
+    //ressortir les données
     const photographHeader = document.querySelector(".photograph-header");
     if (photographHeader){
         const params = getParams()
         const { photographers } = await getDatas()
         const profile = photographers.filter(photographer => photographer.id == params)
-        console.log(profile)
         return profile
     }
 }
 
+async function displayHeader(data){
+    const photographHeader = document.querySelector(".photograph-header");
+
+    data.forEach((media) => {
+        const headerModel = photographerFactory(media);
+        const headerDOM = headerModel.getHeaderUserDOM();
+        photographHeader.appendChild(headerDOM); 
+        return headerDOM
+    });
+}
+
 async function getMedias(){
-    //Utilise le paramètre dans l'url et repère l'id identique dans les datas photographes
-    const mosaicContainer = document.querySelector(".mosaic-container");
-    if (mosaicContainer){
+    //Utilise la valeur du paramètre "ID" dans l'url et repère l'ID identique dans les datas photographes pour
+    //ressortir le profil à afficher
+    const mediaContainer = document.querySelector(".mosaic-container");
+    if (mediaContainer){
         const params = getParams()
         const { media } = await getDatas()
-        const medias = media.filter(media => media.id == params)
-        console.log(medias)
+        const medias = media.filter(media => media.photographerId == params)
         return medias
     }
 }
 
-//header user page /w mediasFactory and photographerFactory
-async function displayUserData(){
-    const userModel = photographerFactory(data)
-    const userCardDOM = userModel.getUserCardDOM(data)
-    const user = await getProfile()
-    const header = userCardDOM(user)
-    const mosaic
-    return {header} 
-}
-//mosaic
-getProfile()
+async function displayGallery(data) {
+    const mediaSection = document.querySelector(".mosaic-container");
+
+    data.forEach((media) => {
+        const mediaModel = mediasFactory(media);
+        const mediaCardDOM = mediaModel.displayMedias();
+        mediaSection.appendChild(mediaCardDOM); 
+        return mediaCardDOM
+    });
+};
+
+
+
+async function initmedias() {
+    // Récupère les datas des photographes
+    const media = await getMedias();
+    const user = await getProfile();
+    console.log(user)
+    console.log(media)
+
+    displayGallery(media);
+    displayHeader(user)
+};
+
+initmedias()
+
+
