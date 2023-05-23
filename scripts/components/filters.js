@@ -39,3 +39,5 @@ select.addEventListener('change', function() {s
     };
     return selectedValue
 });
+
+<select onchange="document.location.href = '/your_url/' + this.value"></select>

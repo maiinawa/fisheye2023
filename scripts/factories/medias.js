@@ -3,8 +3,6 @@ function mediasFactory(data){
     const picture = `assets/images/images/${photographerId}/${image}`;
     const movie = `assets/images/images/${photographerId}/${video}`;
 
-  
-
     function displayMedias(){
         if (image){
             const card = document.createElement('div');
@@ -12,13 +10,11 @@ function mediasFactory(data){
             const titre = document.createElement('span');
             const heart = document.createElement('i');
             const jaime = document.createElement('span');
-            
 
             img.setAttribute("src", picture);
             jaime.setAttribute("id", id);
             heart.setAttribute("class", "fa fa-heart-o");
 
-            
             titre.textContent = title
             jaime.textContent = likes
             heart.setAttribute("id",`${id}`)
@@ -27,8 +23,6 @@ function mediasFactory(data){
             card.appendChild(titre)
             card.appendChild(jaime)
             card.appendChild(heart)
-
-            console.log("image")
             return card
     
         } else if (video){
@@ -43,15 +37,11 @@ function mediasFactory(data){
             videoContainer.setAttribute("src", movie);
             heart.setAttribute("class", "fa fa-heart-o");
             jaime.setAttribute("id", id);
-
-
             
             titre.textContent = title
             jaime.textContent = likes
             heart.setAttribute("id",`${id}`)
-    
-            console.log("video")
-            
+                
             card.appendChild(videoContainer)
             card.appendChild(titre)
             card.appendChild(jaime)
@@ -60,6 +50,7 @@ function mediasFactory(data){
             return card
         }
     }
+    //editer via params URL sort=title
     function sortByDate(a,b){
         return new Date(a.date).valueOf() - new Date(b.date).valueOf(); //timestamps    }
     }
@@ -73,6 +64,7 @@ function mediasFactory(data){
             return 0;
           }
     }
+
     function sortByLikes(a,b){
         if (a.likes > b.likes) {
             return 1;
@@ -85,11 +77,11 @@ function mediasFactory(data){
 
     function addALike(){   
     }
+
     function lightbox(){
 
     }
     
-
     return {id, photographerId, displayMedias, sortByDate, sortByTitle, sortByLikes}
 
 

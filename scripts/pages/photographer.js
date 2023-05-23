@@ -5,10 +5,16 @@ function getParamValue(param){
     return valueOfParam
 }
 
-function getParams() {
+function getID() {
     // Récupère la valeur du paramètre ID lié au photographe choisi
-    const params = getParamValue('user')
-    return params
+    const ID = getParamValue('user')
+    return ID
+}
+
+function getFilterURL(){
+    const sortby = getParamValue('user')
+    return sortby
+
 }
 
 async function getDatas() {
@@ -25,7 +31,7 @@ async function getProfile(){
     //ressortir les données
     const photographHeader = document.querySelector(".photograph-header");
     if (photographHeader){
-        const params = getParams()
+        const params = getID()
         const { photographers } = await getDatas()
         const profile = photographers.filter(photographer => photographer.id == params)
         return profile
@@ -48,7 +54,7 @@ async function getMedias(){
     //ressortir le profil à afficher
     const mediaContainer = document.querySelector(".mosaic-container");
     if (mediaContainer){
-        const params = getParams()
+        const params = getID()
         const { media } = await getDatas()
         const medias = media.filter(media => media.photographerId == params)
         return medias
@@ -66,19 +72,24 @@ async function displayGallery(data) {
     });
 };
 
+async function add(){
+    let url = window.location.href
+    let params = new URLSearchParams(window.location.search)
+    params.set("foo", 4)
+    console.log(window.location.search)
 
+}
 
 async function initmedias() {
     // Récupère les datas des photographes
     const media = await getMedias();
     const user = await getProfile();
-    console.log(user)
-    console.log(media)
 
     displayGallery(media);
     displayHeader(user)
 };
 
 initmedias()
+add()
 
 
